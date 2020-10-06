@@ -10,7 +10,7 @@ import android.view.View;
 import androidx.appcompat.widget.AppCompatEditText;
 
 public class LinedEditText extends AppCompatEditText {
-
+    
     private Rect mRect;
     private Paint mPaint;
 
