@@ -9,6 +9,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class NoteActivity extends AppCompatActivity implements View.OnTouchListener, GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
@@ -21,11 +23,14 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
     private LinedEditText mLinedEditText;
     private EditText mEditTitle;
     private TextView mViewTitle;
+    private RelativeLayout mCheckContainer, mBackArrowContainer;
+    private ImageButton mCheck, mArrow;
 
     // Vars
     private boolean mIsNewNote;
     private Note mNoteInitial;
     private GestureDetector mGestureDetector;
+    private int mMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +40,14 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
         mLinedEditText = findViewById(R.id.note_text);
         mEditTitle = findViewById(R.id.note_edit_title);
         mViewTitle = findViewById(R.id.note_text_title);
+        mCheckContainer = findViewById(R.id.check_container);
+        mBackArrowContainer = findViewById(R.id.back_arrow_container);
+        mCheck = findViewById(R.id.toolbar_check);
+        mArrow = findViewById(R.id.toolbar_back_arrow);
 
         if (getIncomingIntent()) {
             setNewNoteProperties();
+            enableEditMode();
         }
         else {
             setNoteProperties();
@@ -55,11 +65,35 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
             mNoteInitial = getIntent().getParcelableExtra("selected_note");
             Log.d(TAG, "getIncomingIntent : " + mNoteInitial.toString());
 
+            mMode = EDIT_MODE_DISABLED;
+
             mIsNewNote= false;
             return false;
         }
+        mMode = EDIT_MODE_ENABLED;
         mIsNewNote = true;
         return true;
+    }
+
+    private void enableEditMode() {
+        mBackArrowContainer.setVisibility(View.GONE);
+        mCheckContainer.setVisibility(View.VISIBLE);
+
+        mViewTitle.setVisibility(View.GONE);
+        mEditTitle.setVisibility(View.VISIBLE);
+
+        mMode = EDIT_MODE_ENABLED;
+    }
+
+    private void disableEditMode() {
+        mBackArrowContainer.setVisibility(View.VISIBLE);
+        mCheckContainer.setVisibility(View.GONE);
+
+        mViewTitle.setVisibility(View.VISIBLE);
+        mEditTitle.setVisibility(View.GONE);
+
+        mMode = EDIT_MODE_DISABLED;
+
     }
 
     private void setNoteProperties(){
@@ -117,6 +151,7 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
     @Override
     public boolean onDoubleTap(MotionEvent e) {
         Log.d(TAG, "onDoubleTap: double tapped!");
+        enableEditMode();
         return false;
     }
 
