@@ -177,4 +177,14 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
             }
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if(mMode == EDIT_MODE_ENABLED){
+            onClick(mCheck);
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
 }
