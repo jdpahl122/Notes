@@ -1,5 +1,6 @@
 package jonpahl.com;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import jonpahl.com.models.Note;
 
@@ -220,6 +221,21 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
         }
         else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("mode", mMode);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mMode = savedInstanceState.getInt("mode");
+        if(mMode == EDIT_MODE_ENABLED) {
+            enableEditMode();
         }
     }
 }
