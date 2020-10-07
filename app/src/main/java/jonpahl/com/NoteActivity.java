@@ -64,6 +64,7 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
         mGestureDetector = new GestureDetector(this, this);
         mViewTitle.setOnClickListener(this);
         mCheck.setOnClickListener(this);
+        mArrow.setOnClickListener(this);
     }
     private boolean getIncomingIntent(){
         if (getIntent().hasExtra("selected_note")) {
@@ -203,6 +204,10 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
                 enableEditMode();
                 mEditTitle.requestFocus();
                 mEditTitle.setSelection(mEditTitle.length());
+                break;
+            }
+            case R.id.toolbar_back_arrow: {
+                finish();
                 break;
             }
         }
