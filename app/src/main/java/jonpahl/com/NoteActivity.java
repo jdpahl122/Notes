@@ -51,6 +51,7 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
         }
         else {
             setNoteProperties();
+            disableContentInteraction();
         }
 
         setListeners();
@@ -77,6 +78,22 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
         return true;
     }
 
+    private void enableContentInteraction(){
+        mLinedEditText.setKeyListener(new EditText(this).getKeyListener());
+        mLinedEditText.setFocusable(true);
+        mLinedEditText.setFocusableInTouchMode(true);
+        mLinedEditText.setCursorVisible(true);
+        mLinedEditText.requestFocus();
+    }
+
+    private void disableContentInteraction(){
+        mLinedEditText.setKeyListener(null);
+        mLinedEditText.setFocusable(false);
+        mLinedEditText.setFocusableInTouchMode(false);
+        mLinedEditText.setCursorVisible(false);
+        mLinedEditText.clearFocus();
+    }
+
     private void enableEditMode() {
         mBackArrowContainer.setVisibility(View.GONE);
         mCheckContainer.setVisibility(View.VISIBLE);
@@ -85,6 +102,7 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
         mEditTitle.setVisibility(View.VISIBLE);
 
         mMode = EDIT_MODE_ENABLED;
+        enableContentInteraction();
     }
 
     private void disableEditMode() {
@@ -95,7 +113,7 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
         mEditTitle.setVisibility(View.GONE);
 
         mMode = EDIT_MODE_DISABLED;
-
+        disableContentInteraction();
     }
 
     private void setNoteProperties(){
