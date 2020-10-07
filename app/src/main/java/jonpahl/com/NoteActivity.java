@@ -3,11 +3,13 @@ package jonpahl.com;
 import androidx.appcompat.app.AppCompatActivity;
 import jonpahl.com.models.Note;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -116,6 +118,15 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
         disableContentInteraction();
     }
 
+    private void hideSoftKeyboard() {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = this.getCurrentFocus();
+        if (view == null) {
+            view = new View(this);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
     private void setNoteProperties(){
         mViewTitle.setText(mNoteInitial.getTitle());
         mEditTitle.setText(mNoteInitial.getTitle());
@@ -184,6 +195,7 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.toolbar_check: {
+                hideSoftKeyboard();
                 disableEditMode();
                 break;
             }
