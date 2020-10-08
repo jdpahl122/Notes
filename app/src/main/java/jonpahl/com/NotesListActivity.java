@@ -3,6 +3,7 @@ package jonpahl.com;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,9 +16,11 @@ import android.view.View;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import jonpahl.com.adapters.NotesRecyclerAdapter;
 import jonpahl.com.models.Note;
+import jonpahl.com.persistence.NoteRepository;
 import jonpahl.com.util.VerticalSpacingItemDecorator;
 
 public class NotesListActivity extends AppCompatActivity implements NotesRecyclerAdapter.OnNoteListener, View.OnClickListener {
@@ -30,6 +33,7 @@ public class NotesListActivity extends AppCompatActivity implements NotesRecycle
     //vars
     private ArrayList<Note> mNotes = new ArrayList<>();
     private NotesRecyclerAdapter mNoteRecyclerAdapter;
+    private NoteRepository mNoteRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,24 +43,29 @@ public class NotesListActivity extends AppCompatActivity implements NotesRecycle
 
         findViewById(R.id.fab).setOnClickListener(this);
 
+        mNoteRepository = new NoteRepository(this);
         initRecyclerView();
-        insertFakeNotes();
+        retrieveNotes();
 
         setSupportActionBar((Toolbar) findViewById(R.id.notes_toolbar));
         setTitle("Notes");
     }
 
-    private void insertFakeNotes(){
-        for (int i = 0; i < 1000; i++){
-            Note note = new Note();
-            note.setTitle("title # " + i);
-            note.setContent("content # " + i);
-            note.setTimestamp("Jan 2020");
-            mNotes.add(note);
-        }
-        mNoteRecyclerAdapter.notifyDataSetChanged();
+    private void retrieveNotes() {
+        mNoteRepository.retrieveNotesTask().observe(this, new Observer<List<Note>>() {
+            @Override
+            public void onChanged(List<Note> notes) {
+                if(mNotes.size()> 0) {
+                    mNotes.clear();
+                }
+                if(notes != null){
+                    mNotes.addAll(notes);
+                }
+                mNoteRecyclerAdapter.notifyDataSetChanged();
+            }
+        });
     }
-
+    
     private void initRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
