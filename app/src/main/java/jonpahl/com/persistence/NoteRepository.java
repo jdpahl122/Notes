@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import jonpahl.com.async.DeleteAsyncTask;
 import jonpahl.com.async.InsertAsyncTask;
 import jonpahl.com.models.Note;
 
@@ -30,6 +31,6 @@ public class NoteRepository {
     }
 
     public void deleteNote(Note note) {
-
+        new DeleteAsyncTask(mNoteDatabase.getNoteDao()).execute(note);
     }
 }
