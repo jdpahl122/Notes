@@ -8,6 +8,7 @@ import java.util.List;
 
 import jonpahl.com.async.DeleteAsyncTask;
 import jonpahl.com.async.InsertAsyncTask;
+import jonpahl.com.async.UpdateAsyncTask;
 import jonpahl.com.models.Note;
 
 public class NoteRepository {
@@ -23,7 +24,7 @@ public class NoteRepository {
     }
 
     public void updateNote(Note note) {
-
+        new UpdateAsyncTask(mNoteDatabase.getNoteDao()).execute(note);
     }
 
     public LiveData<List<Note>> retrieveNotesTask() {

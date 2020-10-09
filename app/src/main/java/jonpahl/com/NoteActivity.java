@@ -79,9 +79,13 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
     private boolean getIncomingIntent(){
         if (getIntent().hasExtra("selected_note")) {
             mNoteInitial = getIntent().getParcelableExtra("selected_note");
-            mNoteFinal = getIntent().getParcelableExtra("selected_note");
             Log.d(TAG, "getIncomingIntent : " + mNoteInitial.toString());
 
+            mNoteFinal = new Note();
+            mNoteFinal.setTitle(mNoteInitial.getTitle());
+            mNoteFinal.setContent(mNoteInitial.getContent());
+            mNoteFinal.setTimestamp(mNoteInitial.getTimestamp());
+            mNoteFinal.setId(mNoteInitial.getId());
             mMode = EDIT_MODE_DISABLED;
 
             mIsNewNote= false;
@@ -97,8 +101,12 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
             saveNewNote();
         }
         else {
-
+            updateNote();
         }
+    }
+
+    private void updateNote() {
+        mNoteRepository.updateNote(mNoteFinal);
     }
 
     private void saveNewNote() {
