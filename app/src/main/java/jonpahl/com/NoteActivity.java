@@ -10,7 +10,6 @@ package jonpahl.com;
         import android.os.Bundle;
         import android.text.Editable;
         import android.text.TextWatcher;
-        import android.util.Log;
         import android.view.GestureDetector;
         import android.view.MotionEvent;
         import android.view.View;
@@ -79,7 +78,6 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
     private boolean getIncomingIntent(){
         if (getIntent().hasExtra("selected_note")) {
             mNoteInitial = getIntent().getParcelableExtra("selected_note");
-            Log.d(TAG, "getIncomingIntent : " + mNoteInitial.toString());
 
             mNoteFinal = new Note();
             mNoteFinal.setTitle(mNoteInitial.getTitle());
@@ -235,7 +233,6 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public boolean onDoubleTap(MotionEvent e) {
-        Log.d(TAG, "onDoubleTap: double tapped!");
         enableEditMode();
         return false;
     }

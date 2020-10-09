@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -47,7 +46,6 @@ public class NotesListActivity extends AppCompatActivity implements NotesRecycle
         initRecyclerView();
         retrieveNotes();
 
-        Log.d(TAG, "onCreate: thread: " + Thread.currentThread().getName());
         setSupportActionBar((Toolbar) findViewById(R.id.notes_toolbar));
         setTitle("Notes");
     }
@@ -79,7 +77,6 @@ public class NotesListActivity extends AppCompatActivity implements NotesRecycle
 
     @Override
     public void onNoteClick(int position) {
-        Log.d(TAG, "onNoteClick: clicked. " + position);
 
         Intent intent = new Intent(this, NoteActivity.class);
         intent.putExtra("selected_note", mNotes.get(position));

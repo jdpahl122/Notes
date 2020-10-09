@@ -1,6 +1,5 @@
 package jonpahl.com.adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +43,6 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NotesRecyclerAdap
             holder.timestamp.setText(timestamp);
             holder.title.setText(mNotes.get(position).getTitle());
         }catch (NullPointerException e) {
-            Log.e(TAG, "onBindViewHolder: NullPointerException " + e.getMessage() );
         }
     }
 
