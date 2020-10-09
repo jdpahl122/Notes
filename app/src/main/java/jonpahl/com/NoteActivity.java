@@ -3,6 +3,7 @@ package jonpahl.com;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import jonpahl.com.models.Note;
+import jonpahl.com.persistence.NoteRepository;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
     private Note mNoteInitial;
     private GestureDetector mGestureDetector;
     private int mMode;
+    private NoteRepository mNoteRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,8 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
         mBackArrowContainer = findViewById(R.id.back_arrow_container);
         mCheck = findViewById(R.id.toolbar_check);
         mArrow = findViewById(R.id.toolbar_back_arrow);
+
+        mNoteRepository = new NoteRepository(this);
 
         if (getIncomingIntent()) {
             setNewNoteProperties();
@@ -80,6 +84,19 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
         mMode = EDIT_MODE_ENABLED;
         mIsNewNote = true;
         return true;
+    }
+
+    private void saveChanges() {
+        if(mIsNewNote){
+            saveNewNote();
+        }
+        else {
+
+        }
+    }
+
+    private void saveNewNote() {
+        mNoteRepository.insertNoteTask(mNoteInitial);
     }
 
     private void enableContentInteraction(){
@@ -118,6 +135,8 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
 
         mMode = EDIT_MODE_DISABLED;
         disableContentInteraction();
+
+        saveChanges();
     }
 
     private void hideSoftKeyboard() {

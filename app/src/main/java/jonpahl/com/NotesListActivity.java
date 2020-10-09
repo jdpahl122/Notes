@@ -47,6 +47,7 @@ public class NotesListActivity extends AppCompatActivity implements NotesRecycle
         initRecyclerView();
         retrieveNotes();
 
+        Log.d(TAG, "onCreate: thread: " + Thread.currentThread().getName());
         setSupportActionBar((Toolbar) findViewById(R.id.notes_toolbar));
         setTitle("Notes");
     }
@@ -65,7 +66,7 @@ public class NotesListActivity extends AppCompatActivity implements NotesRecycle
             }
         });
     }
-    
+
     private void initRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
