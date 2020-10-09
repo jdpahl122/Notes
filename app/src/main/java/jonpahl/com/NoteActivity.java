@@ -1,23 +1,24 @@
 package jonpahl.com;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import jonpahl.com.models.Note;
-import jonpahl.com.persistence.NoteRepository;
+        import androidx.annotation.NonNull;
+        import androidx.appcompat.app.AppCompatActivity;
+        import jonpahl.com.models.Note;
+        import jonpahl.com.persistence.NoteRepository;
+        import jonpahl.com.util.Utility;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+        import android.app.Activity;
+        import android.os.Bundle;
+        import android.text.Editable;
+        import android.text.TextWatcher;
+        import android.util.Log;
+        import android.view.GestureDetector;
+        import android.view.MotionEvent;
+        import android.view.View;
+        import android.view.inputmethod.InputMethodManager;
+        import android.widget.EditText;
+        import android.widget.ImageButton;
+        import android.widget.RelativeLayout;
+        import android.widget.TextView;
 
 public class NoteActivity extends AppCompatActivity implements View.OnTouchListener, GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, View.OnClickListener, TextWatcher {
 
@@ -148,11 +149,11 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
         if(temp.length() > 0) {
             mNoteFinal.setTitle(mEditTitle.getText().toString());
             mNoteFinal.setContent(mLinedEditText.getText().toString());
-            String timestamp = "Jan 2020";
+            String timestamp = Utility.getCurrentTimestamp();
             mNoteFinal.setTimestamp(timestamp);
 
             if(!mNoteFinal.getContent().equals(mNoteInitial.getContent())
-            || !mNoteFinal.getTitle().equals(mNoteInitial.getTitle())){
+                    || !mNoteFinal.getTitle().equals(mNoteInitial.getTitle())){
                 saveChanges();
             }
         }
