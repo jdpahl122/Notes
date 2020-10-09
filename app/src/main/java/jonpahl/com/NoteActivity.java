@@ -7,6 +7,8 @@ import jonpahl.com.persistence.NoteRepository;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -17,7 +19,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class NoteActivity extends AppCompatActivity implements View.OnTouchListener, GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, View.OnClickListener {
+public class NoteActivity extends AppCompatActivity implements View.OnTouchListener, GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, View.OnClickListener, TextWatcher {
 
     private static final String TAG = "NoteActivity";
     private static final int EDIT_MODE_ENABLED = 1;
@@ -33,6 +35,7 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
     // Vars
     private boolean mIsNewNote;
     private Note mNoteInitial;
+    private Note mNoteFinal;
     private GestureDetector mGestureDetector;
     private int mMode;
     private NoteRepository mNoteRepository;
@@ -70,10 +73,12 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
         mViewTitle.setOnClickListener(this);
         mCheck.setOnClickListener(this);
         mArrow.setOnClickListener(this);
+        mEditTitle.addTextChangedListener(this);
     }
     private boolean getIncomingIntent(){
         if (getIntent().hasExtra("selected_note")) {
             mNoteInitial = getIntent().getParcelableExtra("selected_note");
+            mNoteFinal = getIntent().getParcelableExtra("selected_note");
             Log.d(TAG, "getIncomingIntent : " + mNoteInitial.toString());
 
             mMode = EDIT_MODE_DISABLED;
@@ -96,7 +101,7 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     private void saveNewNote() {
-        mNoteRepository.insertNoteTask(mNoteInitial);
+        mNoteRepository.insertNoteTask(mNoteFinal);
     }
 
     private void enableContentInteraction(){
@@ -132,11 +137,25 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
 
         mViewTitle.setVisibility(View.VISIBLE);
         mEditTitle.setVisibility(View.GONE);
+        mEditTitle.setVisibility(View.GONE);
 
         mMode = EDIT_MODE_DISABLED;
         disableContentInteraction();
 
-        saveChanges();
+        String temp = mLinedEditText.getText().toString();
+        temp = temp.replace("\n", "");
+        temp = temp.replace(" ", "");
+        if(temp.length() > 0) {
+            mNoteFinal.setTitle(mEditTitle.getText().toString());
+            mNoteFinal.setContent(mLinedEditText.getText().toString());
+            String timestamp = "Jan 2020";
+            mNoteFinal.setTimestamp(timestamp);
+
+            if(!mNoteFinal.getContent().equals(mNoteInitial.getContent())
+            || !mNoteFinal.getTitle().equals(mNoteInitial.getTitle())){
+                saveChanges();
+            }
+        }
     }
 
     private void hideSoftKeyboard() {
@@ -157,6 +176,11 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
     private void setNewNoteProperties(){
         mViewTitle.setText("Note Title");
         mEditTitle.setText("Note Title");
+
+        mNoteInitial = new Note();
+        mNoteFinal = new Note();
+        mNoteInitial.setTitle("Note Title");
+        mNoteFinal.setTitle("Note Title");
     }
 
     @Override
@@ -256,5 +280,20 @@ public class NoteActivity extends AppCompatActivity implements View.OnTouchListe
         if(mMode == EDIT_MODE_ENABLED) {
             enableEditMode();
         }
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        mViewTitle.setText(s.toString());
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
     }
 }
